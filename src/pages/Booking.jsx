@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import bookingService from "../appwrite/booking"; // Import the BookingService
 import authService from "../appwrite/auth";
+import { useAuth } from "../context/AuthContext";
 
 const Booking = () => {
   const [formData, setFormData] = useState({
@@ -16,7 +17,7 @@ const Booking = () => {
     // specialRequests: "",
   });
 
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -28,24 +29,25 @@ const Booking = () => {
       [id]: value,
     }));
   };
-  const [userId, setUserId] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const currentUser = async () => {
-      try {
-        const user = await authService.getCurrentUser();
-        setUserId(user?.$id);
-        console.log("User: " + user?.$id);
-      } catch (error) {
-        console.error("Authentication failed!", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const currentUser = async () => {
+  //     try {
+  //       const user = await authService.getCurrentUser();
+  //       setUserId(user?.$id);
+  //       console.log("User: " + user?.$id);
+  //     } catch (error) {
+  //       console.error("Authentication failed!", error);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    currentUser();
-  }, []);
+  //   currentUser();
+  // }, []);
 
+  const { user } = useAuth();
   const handleSubmit = async (event) => {
     event.preventDefault();
     // Handle form submission logic here
@@ -56,7 +58,7 @@ const Booking = () => {
 
     const bookingData = {
       ...formData,
-      userId, // Include the user ID in the booking data
+      userId: user?.$id, // Include the user ID in the booking data
       status: "pending",
     };
     try {
@@ -74,8 +76,8 @@ const Booking = () => {
       //   carType: "",
       //   specialRquests: "",
       // });
-      alert("Booking Successful!");
-      console.log("formData", formData);
+      // alert("Booking Successful!");
+      console.log("bookingData", formData);
     } catch (error) {
       setError("Error creating booking: " + error.message);
     } finally {
@@ -244,22 +246,7 @@ const Booking = () => {
             {/* <option value={"convertible"}>Convertible</option> */}
           </select>
         </div>
-        {/* <div className="col-span-2">
-          <label
-            htmlFor="specialRequests"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Special Requests
-          </label>
-          <textarea
-            id="specialRequests"
-            rows="3"
-            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Any specific requirements or preferences..."
-            value={formData.specialRequests}
-            onChange={handleInputChange}
-          ></textarea>
-        </div> */}
+
         <div className="col-span-2 text-center">
           <button
             type="submit"

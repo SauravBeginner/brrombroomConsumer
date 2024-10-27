@@ -29,9 +29,9 @@ export class BookingService {
     userId,
     status,
   }) {
-    const uniqueId = ID.unique(); // Generate a unique ID
-
     try {
+      const uniqueId = ID.unique(); // Generate a unique ID
+      console.log("uniqueId", uniqueId);
       return await this.databases.createDocument(
         conf.appwriteDatabaseId,
         conf.appwriteBookingCollectionId,

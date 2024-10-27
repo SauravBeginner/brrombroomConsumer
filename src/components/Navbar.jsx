@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Logo from "./Logo";
 import { Link, useNavigate } from "react-router-dom";
-import authService from "../appwrite/auth";
 import Modal from "./Modal";
 import { Bell, Mail, User } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
@@ -13,38 +13,11 @@ const Navbar = () => {
 
   const navigate = useNavigate();
 
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const checkAuth = async () => {
-    try {
-      const user = await authService.getCurrentUser();
-      setUser(user.name);
-      console.log("User: " + user.name);
-    } catch (error) {
-      console.error("Authentication failed!", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { user, logout, loading } = useAuth();
 
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const user = await authService.getCurrentUser();
-        setUser(user.name);
-        console.log("User: " + user.name);
-      } catch (error) {
-        console.error("Authentication failed!", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkAuth();
-  }, []);
   const handleLogout = async () => {
     try {
-      await authService.logout();
+      await logout();
       navigate("/login");
     } catch (error) {
       console.error("Error while logging out!", error);
@@ -196,7 +169,7 @@ const Navbar = () => {
           {profileOpen && (
             <ul className="dropdown-menu absolute right-0 w-48 bg-white shadow-lg rounded-md py-2 mt-2 z-10">
               <li className="dropdown-header px-4 py-2">
-                <h6>{user}</h6>
+                <h6>{user?.name}</h6>
                 <span className="text-sm text-gray-500">Consumer</span>
               </li>
               <hr className="my-1" />

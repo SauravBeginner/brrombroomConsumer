@@ -2,9 +2,12 @@ import React, { useEffect, useState } from "react";
 import bookingService from "../appwrite/booking";
 import { ArrowRight } from "lucide-react";
 import authService from "../appwrite/auth";
+import { useAuth } from "../context/AuthContext";
 
 // MyBookings component
 const MyBookings = () => {
+  const { user } = useAuth();
+
   const [userId, setUserId] = useState("");
   const [myBookings, setMyBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,7 +25,8 @@ const MyBookings = () => {
   };
 
   useEffect(() => {
-    checkAuth();
+    console.log("user context", user);
+    // checkAuth();
     fetchUpcomingBookings();
   }, []);
 
@@ -30,7 +34,9 @@ const MyBookings = () => {
     setLoading(true);
     setError("");
     try {
-      const bookings = await bookingService.getMyBookings({ userId });
+      const bookings = await bookingService.getMyBookings({
+        userId: user?.$id,
+      });
       setMyBookings(bookings?.documents);
       console.log("bookings", bookings);
       setLoading(false);
@@ -48,7 +54,7 @@ const MyBookings = () => {
       <h1 className="text-2xl font-bold mb-4">My Bookings</h1>
       {myBookings.map((ride) => (
         <div
-          key={ride.id}
+          key={ride?.$id}
           className="bg-white rounded-lg shadow-md p-4 mb-4 flex"
         >
           {/* Car Image */}
