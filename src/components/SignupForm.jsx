@@ -9,7 +9,7 @@ export const SignupForm = () => {
     email: "",
     password: "",
     name: "",
-    // role: "consumer", // Default role is consumer
+    role: "consumer", // Default role is consumer
   });
   const { signup } = useAuth();
   const navigate = useNavigate();
@@ -17,8 +17,6 @@ export const SignupForm = () => {
     e.preventDefault();
     try {
       const response = await signup(user);
-      console.log("response:", response);
-
       if (response) {
         // alert("Verification link has been sent to your email");
         alert("Account Created Successfully!");
@@ -27,6 +25,7 @@ export const SignupForm = () => {
           email: "",
           password: "",
           name: "",
+          role: "",
         });
         navigate("/create-booking");
       }

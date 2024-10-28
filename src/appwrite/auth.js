@@ -1,4 +1,4 @@
-import { Client, Account, ID, OAuthProvider, Teams } from "appwrite";
+import { Client, Account, ID, OAuthProvider, Teams, Databases } from "appwrite";
 import conf from "../conf/conf.js";
 
 export class AuthService {
@@ -12,6 +12,7 @@ export class AuthService {
 
     this.account = new Account(this.client);
     this.teams = new Teams(this.client);
+    this.databases = new Databases(this.client);
   }
 
   // async assignLabel(userId, role) {
@@ -38,7 +39,7 @@ export class AuthService {
   //   } catch (error) {}
   // }
 
-  async createAccount({ email, password, name }) {
+  async createAccount({ email, password, name, role }) {
     try {
       const userAccount = await this.account.create(
         ID.unique(),
@@ -57,12 +58,39 @@ export class AuthService {
         // // Step 3: Assign user to the appropriate team based on their role
 
         // // Return user account details
-        return this.login({ email, password });
+        const session = await this.login({ email, password });
+        await this.databases.createDocument(
+          conf.appwriteDatabaseId,
+          conf.appwriteRoleCollectionId,
+          ID.unique(),
+          {
+            userId: userAccount.$id,
+            role,
+          }
+        );
+
+        // Step 4: Retrieve and return the current user details, including the role
+        return session;
       } else {
         return userAccount;
       }
     } catch (error) {
       throw error;
+    }
+  }
+
+  async getUserRole(userId) {
+    try {
+      const response = await this.databases.listDocuments(
+        conf.appwriteDatabaseId,
+        conf.appwriteRoleCollectionId,
+        [Query.equal("userId", userId)]
+      );
+
+      return response.documents[0]?.role || null;
+    } catch (error) {
+      console.error("Error fetching user role:", error);
+      return null;
     }
   }
   async createTeam(teamName) {

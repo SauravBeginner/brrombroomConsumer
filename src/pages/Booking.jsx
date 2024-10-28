@@ -14,11 +14,12 @@ const Booking = () => {
     returnDate: "",
     numPassengers: "",
     carType: "",
-    // specialRequests: "",
   });
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { user } = useAuth();
 
   const handleInputChange = (event) => {
     const { id, value } = event.target;
@@ -28,39 +29,34 @@ const Booking = () => {
       [id]: value,
     }));
   };
-  const [loading, setLoading] = useState(false);
 
-  const { user } = useAuth();
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // Handle form submission logic here
-
     setLoading(true);
     setError("");
     setSuccess("");
 
     const bookingData = {
       ...formData,
-      userId: user?.$id, // Include the user ID in the booking data
+      userId: user?.$id,
       status: "pending",
     };
+
     try {
       await bookingService.createBooking(bookingData);
       setSuccess("Booking successfully created!");
-      // setFormData({
-      //   name: "",
-      //   email: "",
-      //   phone: "",
-      //   pickupLocation: "",
-      //   dropoffLocation: "",
-      //   pickupDate: "",
-      //   returnDate: "",
-      //   numPassengers: "",
-      //   carType: "",
-      //   specialRquests: "",
-      // });
-      // alert("Booking Successful!");
       console.log("bookingData", formData);
+      setFormData({
+        name: "",
+        email: "",
+        phone: "",
+        pickupLocation: "",
+        dropoffLocation: "",
+        pickupDate: "",
+        returnDate: "",
+        numPassengers: "",
+        carType: "",
+      });
     } catch (error) {
       setError("Error creating booking: " + error.message);
     } finally {
@@ -69,8 +65,11 @@ const Booking = () => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-6">
+    <div className="bg-white shadow-md rounded-lg p-6 max-w-lg mx-auto">
       <h5 className="text-lg font-semibold mb-4">Car Booking Form</h5>
+
+      {error && <div className="text-red-500">{error}</div>}
+      {success && <div className="text-green-500">{success}</div>}
 
       {/* Car Booking Form */}
       <form
@@ -220,13 +219,12 @@ const Booking = () => {
             onChange={handleInputChange}
             required
           >
-            <option value="" disabled selected>
+            <option value="" disabled>
               Choose...
             </option>
             <option value={"suv"}>SUV</option>
             <option value={"sedan"}>Sedan</option>
             <option value={"minivan"}>Minivan</option>
-            {/* <option value={"convertible"}>Convertible</option> */}
           </select>
         </div>
 
@@ -234,7 +232,7 @@ const Booking = () => {
           <button
             type="submit"
             disabled={loading}
-            className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
+            className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-200"
           >
             {loading ? "Booking..." : "Book Now"}
           </button>
@@ -252,7 +250,6 @@ const Booking = () => {
                 returnDate: "",
                 numPassengers: "",
                 carType: "",
-                specialRquests: "",
               });
             }}
           >

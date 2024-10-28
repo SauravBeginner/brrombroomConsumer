@@ -1,6 +1,5 @@
 import { Client, Databases, ID, Query, Storage } from "appwrite";
 import conf from "../conf/conf.js";
-
 export class BookingService {
   client = new Client();
   databases;
@@ -56,6 +55,21 @@ export class BookingService {
     }
   }
 
+  subscribeToBookings(callback) {
+    const subscription = this.client.subscribe(
+      `documents.${conf.appwriteDatabaseId}.${conf.appwriteBookingCollectionId}`,
+      (response) => {
+        // Check if the response is for a new document creation
+        if (response.events.includes("documents.create")) {
+          console.log("New booking event received:", response); // Log the new booking event
+          callback(response);
+        }
+      }
+    );
+    return () => {
+      subscription(); // Unsubscribe from events when done
+    };
+  }
   async getUpcomingBookings(
     queries = [
       //Query.equal("status", "active"),
