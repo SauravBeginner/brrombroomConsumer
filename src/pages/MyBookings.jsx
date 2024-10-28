@@ -3,6 +3,7 @@ import bookingService from "../appwrite/booking";
 import { ArrowRight } from "lucide-react";
 import authService from "../appwrite/auth";
 import { useAuth } from "../context/AuthContext";
+import Loader from "../components/Loader";
 
 // MyBookings component
 const MyBookings = () => {
@@ -47,7 +48,7 @@ const MyBookings = () => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <Loader />;
 
   return (
     <div className="p-4 bg-gray-100 min-h-screen">
@@ -99,7 +100,7 @@ const MyBookings = () => {
             <div className="mt-2 text-sm text-gray-600">
               <p>
                 {ride.carType} | {ride.seats} Seats |{" "}
-                {ride.hasAC ? "AC" : "No AC"} | {ride.luggage} Luggage Bags
+                {ride.hasAC ? "AC" : "No AC"} | {ride.numPassengers} Person
               </p>
               <p>
                 {ride.includedKm} kms included | ₹{ride.extraKmCharge}/km after{" "}

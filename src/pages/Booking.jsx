@@ -17,7 +17,6 @@ const Booking = () => {
     // specialRequests: "",
   });
 
-  // const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -30,22 +29,6 @@ const Booking = () => {
     }));
   };
   const [loading, setLoading] = useState(false);
-
-  // useEffect(() => {
-  //   const currentUser = async () => {
-  //     try {
-  //       const user = await authService.getCurrentUser();
-  //       setUserId(user?.$id);
-  //       console.log("User: " + user?.$id);
-  //     } catch (error) {
-  //       console.error("Authentication failed!", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   currentUser();
-  // }, []);
 
   const { user } = useAuth();
   const handleSubmit = async (event) => {

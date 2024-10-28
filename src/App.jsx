@@ -5,6 +5,7 @@ import React, { Suspense } from "react";
 import AuthLayout from "./layout/user/AuthLayout";
 import AuthHandle from "./layout/user/AuthHandle";
 import MyBookings from "./pages/MyBookings";
+import Loader from "./components/Loader";
 
 const Home = React.lazy(() => import("./pages/Home"));
 
@@ -23,8 +24,8 @@ function App() {
       {/* <Navbar /> */}
       <Suspense
         fallback={
-          <div className="flex h-screen justify-center items-center">
-            <h1>loading...</h1>
+          <div>
+            <Loader />
           </div>
         }
       >
@@ -42,11 +43,11 @@ function App() {
           >
             {/* <Route path="/" element={<Home />} /> */}
 
-            <Route path="/consumer-dashboard" element={<ConsumerDashboard />} />
+            {/* <Route path="/consumer-dashboard" element={<ConsumerDashboard />} />
             <Route
               path="/car-provider-dashboard"
               element={<ProviderDashboard />}
-            />
+            /> */}
 
             <Route path="/create-booking" element={<Booking />} />
             <Route path="/my-bookings" element={<MyBookings />} />

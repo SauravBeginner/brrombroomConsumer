@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   // Login function
-  const login = async (email, password) => {
+  const login = async ({ email, password }) => {
     try {
       const session = await authService.login({ email, password });
       const currentUser = await authService.getCurrentUser();

@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Input } from "./Input";
 import { useState } from "react";
 import { Button } from "./Button";
-import authService from "../appwrite/auth";
+import { useAuth } from "../context/AuthContext";
 
 export const SignupForm = () => {
   const [user, setUser] = useState({
@@ -11,12 +11,12 @@ export const SignupForm = () => {
     name: "",
     // role: "consumer", // Default role is consumer
   });
+  const { signup } = useAuth();
   const navigate = useNavigate();
-
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      const response = await authService.createAccount(user);
+      const response = await signup(user);
       console.log("response:", response);
 
       if (response) {
@@ -38,6 +38,10 @@ export const SignupForm = () => {
     <div className="w-1/2 lg:w-3/4 col-span-1 lg:col-span-2 items-center justify-center">
       <div className="px-2 md:px-12">
         <p className="text-2xl font-bold text-gray-900 md:text-4xl">Sign Up</p>
+        <p className="text-xl font-bold text-gray-900 md:text-3xl pt-2">
+          As a Consumer
+        </p>
+
         <p className="mt-4 text-lg text-gray-600">
           Already have an account,{" "}
           <Link

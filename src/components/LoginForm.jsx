@@ -4,6 +4,7 @@ import { Input } from "./Input";
 import { Button } from "./Button";
 import authService from "../appwrite/auth";
 import { ID } from "appwrite";
+import { useAuth } from "../context/AuthContext";
 
 export const LoginForm = () => {
   const [credentials, setCredentials] = useState({
@@ -11,15 +12,16 @@ export const LoginForm = () => {
     password: "",
   });
   // const [role, setRole] = useState("");
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await authService.login(credentials);
+      const response = await login(credentials);
       if (response) {
-        const currentUser = await authService.getCurrentUser();
-        console.log("Current User:", currentUser);
+        // const currentUser = await authService.getCurrentUser();
+        console.log("response:", response);
         // setRole(currentUser);
 
         navigate("/create-booking");
@@ -33,6 +35,9 @@ export const LoginForm = () => {
     <div className="w-1/2 lg:w-3/4 col-span-1 lg:col-span-2 items-center justify-center">
       <div className="px-2 md:px-12">
         <p className="text-2xl font-bold text-gray-900 md:text-4xl">Log In </p>
+        <p className="text-xl font-bold text-gray-900 md:text-3xl pt-2">
+          As a Consumer
+        </p>
         <p className="mt-4 text-lg text-gray-600">
           Don't have an account,{" "}
           <Link
