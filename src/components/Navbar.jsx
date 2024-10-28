@@ -1,11 +1,28 @@
 import { useState } from "react";
 import Logo from "./Logo";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Modal from "./Modal";
+import { Bell, Mail, User } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 const Navbar = () => {
   const [notificationsOpen, setNotificationsOpen] = useState(false);
   const [messagesOpen, setMessagesOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  const navigate = useNavigate();
+
+  const { user, logout, loading } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate("/login");
+    } catch (error) {
+      console.error("Error while logging out!", error);
+    }
+  };
 
   return (
     <header className="header fixed-top flex items-center justify-between w-full bg-white shadow-md p-4">
@@ -58,7 +75,7 @@ const Navbar = () => {
             className="nav-link nav-icon relative"
             onClick={() => setNotificationsOpen(!notificationsOpen)}
           >
-            <i className="bi bi-bell text-2xl"></i>
+            <Bell />
             <span className="absolute top-0 right-0 bg-blue-500 text-white text-xs rounded-full px-1">
               4
             </span>
@@ -97,7 +114,7 @@ const Navbar = () => {
             className="nav-link nav-icon relative"
             onClick={() => setMessagesOpen(!messagesOpen)}
           >
-            <i className="bi bi-chat-left-text text-2xl"></i>
+            <Mail />
             <span className="absolute top-0 right-0 bg-green-500 text-white text-xs rounded-full px-1">
               3
             </span>
@@ -137,23 +154,23 @@ const Navbar = () => {
         {/* Profile Dropdown */}
         <div className="relative">
           <button
-            className="nav-profile flex items-center"
+            className="nav-link nav-icon relative"
+            // className="nav-profile flex items-center"
             onClick={() => setProfileOpen(!profileOpen)}
           >
-            <img
+            {/* <img
               src="/assets/img/Banner-Image.webp"
               alt="Profile"
               className="w-8 h-8 rounded-full"
-            />
-            <span className="ml-2 hidden md:block">K.Ch.Das</span>
+            /> */}
+            <User />
+            {/* <span className="ml-2 hidden md:block">{user}</span> */}
           </button>
           {profileOpen && (
             <ul className="dropdown-menu absolute right-0 w-48 bg-white shadow-lg rounded-md py-2 mt-2 z-10">
               <li className="dropdown-header px-4 py-2">
-                <h6>Kunal Chandra Das</h6>
-                <span className="text-sm text-gray-500">
-                  Fullstack Developer
-                </span>
+                <h6>{user?.name}</h6>
+                <span className="text-sm text-gray-500">Consumer</span>
               </li>
               <hr className="my-1" />
               <li className="dropdown-item px-4 py-2">
@@ -178,15 +195,27 @@ const Navbar = () => {
               </li>
               <hr className="my-1" />
               <li className="dropdown-item px-4 py-2">
-                <a href="#" className="flex items-center">
+                <button
+                  onClick={() => setShowLogoutModal(true)}
+                  className="flex items-center"
+                >
                   <i className="bi bi-box-arrow-right mr-2"></i>
                   Sign Out
-                </a>
+                </button>
               </li>
             </ul>
           )}
         </div>
       </nav>
+      {/* Logout Confirmation Modal */}
+      <Modal
+        isOpen={showLogoutModal}
+        onClose={() => setShowLogoutModal(false)}
+        onConfirm={() => {
+          setShowLogoutModal(false);
+          handleLogout();
+        }}
+      />
     </header>
   );
 };

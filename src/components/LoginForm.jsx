@@ -2,63 +2,30 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Input } from "./Input";
 import { Button } from "./Button";
-import { useGoogleLogin } from "@react-oauth/google";
 import authService from "../appwrite/auth";
 import { ID } from "appwrite";
+import { useAuth } from "../context/AuthContext";
 
 export const LoginForm = () => {
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
-    // mobile: "",
   });
-  const [role, setRole] = useState("");
+  // const [role, setRole] = useState("");
+  const { login } = useAuth();
   const navigate = useNavigate();
-
-  const googleLogin = useGoogleLogin({
-    onSuccess: (tokenResponse) => {
-      const credential = tokenResponse?.access_token;
-      console.log(tokenResponse);
-      if (credential) {
-        try {
-          // const decodedToken = jwtDecode<any>(credential);
-          // console.log("Decoded Token:", decodedToken);
-
-          authService.loginWithGoogle();
-
-          // Now you can access user information from decodedToken
-          // For example: decodedToken.name, decodedToken.email, etc.
-        } catch (error) {
-          console.error("Failed to decode access token:", error);
-        }
-      }
-    },
-    onError: () => {
-      console.log("Login Failed");
-    },
-  });
-
-  // const errorMesg = useSelector((state) => state.auth?.error);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      // await authService.phoneLogin("+91" + credentials.mobile);
-      // // Redirect or further actions after successful login
-      // navigate(`/otp-verify/${ID.unique()}`);
-
-      const response = await authService.login(credentials);
+      const response = await login(credentials);
       if (response) {
-        const currentUser = await authService.getCurrentUser();
-        console.log("Current User:", currentUser);
-        setRole(currentUser);
+        // const currentUser = await authService.getCurrentUser();
+        console.log("response:", response);
+        // setRole(currentUser);
+
+        navigate("/upcoming-bookings");
       }
-      // if (currentUser.prefs.role === "car-provider") {
-      //   navigate("/car-provider-dashboard");
-      // }
-      // if (currentUser.prefs.role === "consumer") {
-      //   navigate("/consumer-dashboard");
-      // }
     } catch (error) {
       console.error("Login failed:", error);
       // Handle
@@ -68,6 +35,9 @@ export const LoginForm = () => {
     <div className="w-1/2 lg:w-3/4 col-span-1 lg:col-span-2 items-center justify-center">
       <div className="px-2 md:px-12">
         <p className="text-2xl font-bold text-gray-900 md:text-4xl">Log In </p>
+        <p className="text-xl font-bold text-gray-900 md:text-3xl pt-2">
+          As a Driver
+        </p>
         <p className="mt-4 text-lg text-gray-600">
           Don't have an account,{" "}
           <Link
@@ -111,12 +81,12 @@ export const LoginForm = () => {
 
           <Button type="submit">Login</Button>
         </form>
-        <Button
+        {/* <Button
           className="bg-white !text-black hover:!text-white border"
           onClick={() => googleLogin()}
         >
           Sign in with Google 🚀
-        </Button>
+        </Button> */}
         {/* {errorMesg && <p className="text-sm text-red-500">{errorMesg || ""}</p>} */}
       </div>
     </div>

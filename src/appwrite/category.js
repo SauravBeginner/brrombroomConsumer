@@ -19,7 +19,7 @@ export class CategoryService {
     try {
       return await this.databases.createDocument(
         conf.appwriteDatabaseId,
-        conf.appwriteCategoryCollectionId,
+        conf.appwriteBookingCollectionId,
         ID.unique(),
         {
           title,
@@ -34,7 +34,7 @@ export class CategoryService {
     try {
       return await this.databases.updateDocument(
         conf.appwriteDatabaseId,
-        conf.appwriteCategoryCollectionId,
+        conf.appwriteBookingCollectionId,
         id,
         {
           title,
@@ -49,7 +49,7 @@ export class CategoryService {
     try {
       await this.databases.deleteDocument(
         conf.appwriteDatabaseId,
-        conf.appwriteCategoryCollectionId,
+        conf.appwriteBookingCollectionId,
         id
       );
 
@@ -63,7 +63,7 @@ export class CategoryService {
     try {
       return await this.databases.getDocument(
         conf.appwriteDatabaseId,
-        conf.appwriteCategoryCollectionId,
+        conf.appwriteBookingCollectionId,
         id
       );
     } catch (error) {
@@ -82,7 +82,7 @@ export class CategoryService {
     try {
       return await this.databases.listDocuments(
         conf.appwriteDatabaseId,
-        conf.appwriteCategoryCollectionId,
+        conf.appwriteBookingCollectionId,
         queries
       );
     } catch (error) {

@@ -14,31 +14,31 @@ export class AuthService {
     this.teams = new Teams(this.client);
   }
 
-  async assignLabel(userId, role) {
-    const functionId = "671800f8000c3f6fd7d8";
-    try {
-      const response = await fetch(
-        `${conf.appwriteUrl}/functions/${functionId}/executions`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "X-Appwrite-Project": conf.appwriteProjectId,
-            "X-Appwrite-Key": "98fd4...a2ad2", // Use an appropriate API key
-          },
-          body: JSON.stringify({ userId, roles: [role] }),
-        }
-      );
+  // async assignLabel(userId, role) {
+  //   const functionId = "671800f8000c3f6fd7d8";
+  //   try {
+  //     const response = await fetch(
+  //       `${conf.appwriteUrl}/functions/${functionId}/executions`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           "X-Appwrite-Project": conf.appwriteProjectId,
+  //           "X-Appwrite-Key": "98fd4...a2ad2", // Use an appropriate API key
+  //         },
+  //         body: JSON.stringify({ userId, roles: [role] }),
+  //       }
+  //     );
 
-      console.log("client response:", response);
-      if (!response.ok) {
-        throw new Error("Failed to assign label");
-      }
-      return await response.json();
-    } catch (error) {}
-  }
+  //     console.log("client response:", response);
+  //     if (!response.ok) {
+  //       throw new Error("Failed to assign label");
+  //     }
+  //     return await response.json();
+  //   } catch (error) {}
+  // }
 
-  async createAccount({ email, password, name, role }) {
+  async createAccount({ email, password, name }) {
     try {
       const userAccount = await this.account.create(
         ID.unique(),
@@ -49,15 +49,15 @@ export class AuthService {
 
       if (userAccount) {
         // Step 2: Auto-login after signup
-        await this.login({ email, password });
-        // Step 3: Assign the user label based on their role
-        const response = await this.assignLabel(userAccount.$id, role);
-        console.log("Label assignment response:", response);
+        // await this.login({ email, password });
+        // // Step 3: Assign the user label based on their role
+        // const response = await this.assignLabel(userAccount.$id, role);
+        // console.log("Label assignment response:", response);
 
-        // Step 3: Assign user to the appropriate team based on their role
+        // // Step 3: Assign user to the appropriate team based on their role
 
-        // Return user account details
-        return userAccount;
+        // // Return user account details
+        return this.login({ email, password });
       } else {
         return userAccount;
       }

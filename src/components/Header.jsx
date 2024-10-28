@@ -1,6 +1,6 @@
 import React from "react";
 import Logo from "./Logo";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -11,15 +11,15 @@ const Header = () => {
         <div className="flex items-center space-x-4">
           <Logo />
           <nav className="hidden md:flex space-x-4">
-            <a href="#" className="text-gray-600 hover:text-gray-900">
+            <Link to="/" className="text-gray-600 hover:text-gray-900">
               WHY MYBIZ?
-            </a>
-            <a href="#" className="text-gray-600 hover:text-gray-900">
+            </Link>
+            <Link to="/" className="text-gray-600 hover:text-gray-900">
               EXPENSE MANAGEMENT
-            </a>
-            <a href="#" className="text-gray-600 hover:text-gray-900">
+            </Link>
+            <Link to="/" className="text-gray-600 hover:text-gray-900">
               CASE STUDIES
-            </a>
+            </Link>
           </nav>
         </div>
         <div className="flex space-x-2">

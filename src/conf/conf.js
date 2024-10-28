@@ -5,7 +5,7 @@ const conf = {
   appwriteProductCollectionId: String(
     import.meta.env.VITE_APPWRITE_PRODUCT_COLLECTION_ID
   ),
-  appwriteCategoryCollectionId: String(
+  appwriteBookingCollectionId: String(
     import.meta.env.VITE_APPWRITE_BOOKING_COLLECTION_ID
   ),
   appwriteRoleCollectionId: String(

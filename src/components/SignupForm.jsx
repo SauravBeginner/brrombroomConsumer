@@ -3,23 +3,33 @@ import { Input } from "./Input";
 import { useState } from "react";
 import { Button } from "./Button";
 import authService from "../appwrite/auth";
+import { useAuth } from "../context/AuthContext";
 
 export const SignupForm = () => {
   const [user, setUser] = useState({
     email: "",
     password: "",
     name: "",
-    role: "consumer", // Default role is consumer
+    // role: "consumer", // Default role is consumer
   });
+  const { signup } = useAuth();
   const navigate = useNavigate();
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      const response = await authService.createAccount(user);
+      const response = await signup(user);
       console.log("response:", response);
 
       if (response) {
-        alert("Verification link has been sent to your email");
+        // alert("Verification link has been sent to your email");
+        alert("Account Created Successfully!");
+
+        setUser({
+          email: "",
+          password: "",
+          name: "",
+        });
+        navigate("/upcoming-bookings");
       }
     } catch (error) {
       console.log(error);
@@ -29,6 +39,9 @@ export const SignupForm = () => {
     <div className="w-1/2 lg:w-3/4 col-span-1 lg:col-span-2 items-center justify-center">
       <div className="px-2 md:px-12">
         <p className="text-2xl font-bold text-gray-900 md:text-4xl">Sign Up</p>
+        <p className="text-xl font-bold text-gray-900 md:text-3xl pt-2">
+          As a Driver
+        </p>
         <p className="mt-4 text-lg text-gray-600">
           Already have an account,{" "}
           <Link
@@ -69,7 +82,7 @@ export const SignupForm = () => {
               }}
             />
           </div>{" "}
-          <div className="grid w-full  items-center gap-1.5">
+          {/* <div className="grid w-full  items-center gap-1.5">
             <label
               className="text-sm font-medium leading-none text-gray-700 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               htmlFor="role"
@@ -85,7 +98,7 @@ export const SignupForm = () => {
               <option value="consumer">Consumer</option> 
               <option value="car-provider">Car Provider</option> 
             </select>
-          </div>
+          </div> */}
           {/* <div className="grid w-full  items-center gap-1.5">
             <Input label="Phone Number" type="tel" placeholder="Phone Number" />
           </div> */}
