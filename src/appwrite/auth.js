@@ -1,4 +1,12 @@
-import { Client, Account, ID, OAuthProvider, Teams, Databases } from "appwrite";
+import {
+  Client,
+  Account,
+  ID,
+  OAuthProvider,
+  Teams,
+  Databases,
+  Query,
+} from "appwrite";
 import conf from "../conf/conf.js";
 
 export class AuthService {
