@@ -13,14 +13,15 @@ const UpcomingBookings = () => {
 
   useEffect(() => {
     fetchUpcomingBookings();
-    const unsubscribe = bookingService.subscribeToBookings((response) =>
-      fetchUpcomingBookings()
-    );
+    const unsubscribe = bookingService.subscribeToBookings((response) => {
+      console.log("New booking event received:", response); // Log the exact response for debugging=
+      fetchUpcomingBookings();
+    });
     return () => {
       unsubscribe();
     };
   }, []);
-
+  // console.log(user);
   const fetchUpcomingBookings = async () => {
     setLoading(true);
     setError("");
@@ -39,8 +40,8 @@ const UpcomingBookings = () => {
     // Logic to handle ride acceptance (e.g., API call)
 
     try {
-      console.log(driverName);
-      await bookingService.assignDriverToBooking({
+      console.log(user?.name);
+      const response = await bookingService.assignDriverToBooking({
         bookingId,
         driverId: user?.$id,
         driverName: user?.name,
