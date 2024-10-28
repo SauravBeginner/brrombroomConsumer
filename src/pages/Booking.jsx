@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import bookingService from "../appwrite/booking"; // Import the BookingService
-import authService from "../appwrite/auth";
 import { useAuth } from "../context/AuthContext";
 
 const Booking = () => {
