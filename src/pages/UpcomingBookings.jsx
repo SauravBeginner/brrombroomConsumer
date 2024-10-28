@@ -13,6 +13,12 @@ const UpcomingBookings = () => {
 
   useEffect(() => {
     fetchUpcomingBookings();
+    const unsubscribe = bookingService.subscribeToBookings((response) =>
+      fetchUpcomingBookings()
+    );
+    return () => {
+      unsubscribe();
+    };
   }, []);
 
   const fetchUpcomingBookings = async () => {

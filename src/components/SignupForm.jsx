@@ -2,7 +2,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { Input } from "./Input";
 import { useState } from "react";
 import { Button } from "./Button";
-import authService from "../appwrite/auth";
 import { useAuth } from "../context/AuthContext";
 
 export const SignupForm = () => {
@@ -10,7 +9,7 @@ export const SignupForm = () => {
     email: "",
     password: "",
     name: "",
-    // role: "consumer", // Default role is consumer
+    role: "driver", // Default role is consumer
   });
   const { signup } = useAuth();
   const navigate = useNavigate();
@@ -18,8 +17,6 @@ export const SignupForm = () => {
     e.preventDefault();
     try {
       const response = await signup(user);
-      console.log("response:", response);
-
       if (response) {
         // alert("Verification link has been sent to your email");
         alert("Account Created Successfully!");
@@ -28,6 +25,7 @@ export const SignupForm = () => {
           email: "",
           password: "",
           name: "",
+          role: "",
         });
         navigate("/upcoming-bookings");
       }
@@ -42,6 +40,7 @@ export const SignupForm = () => {
         <p className="text-xl font-bold text-gray-900 md:text-3xl pt-2">
           As a Driver
         </p>
+
         <p className="mt-4 text-lg text-gray-600">
           Already have an account,{" "}
           <Link

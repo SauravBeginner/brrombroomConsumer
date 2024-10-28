@@ -15,19 +15,21 @@ export class BookingService {
     // this.bucket = new Storage(this.client);
   }
 
-  // async createBooking(bookingData) {
-  //   try {
-  //     return await this.databases.createDocument(
-  //       conf.appwriteDatabaseId,
-  //       conf.appwriteBookingCollectionId,
-  //       ID.unique(),
-  //       bookingData
-  //     );
-  //   } catch (error) {
-  //     console.log("Appwrite Service :: createBooking error: ", error);
-  //   }
-  // }
-
+  subscribeToBookings(callback) {
+    const subscription = this.client.subscribe(
+      `documents.${conf.appwriteDatabaseId}.${conf.appwriteBookingCollectionId}`,
+      (response) => {
+        // Check if the response is for a new document creation
+        if (response.events.includes("documents.create")) {
+          console.log("New booking event received:", response); // Log the new booking event
+          callback(response);
+        }
+      }
+    );
+    return () => {
+      subscription(); // Unsubscribe from events when done
+    };
+  }
   async getUpcomingBookings() {
     // queries = [
     //   // Query.equal("status", "pending"),
